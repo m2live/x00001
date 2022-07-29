@@ -4,31 +4,7 @@
         "hostName": "example",
         "admin": "admin@example.com"
     },
-    "hosting": [
-        {
-            "listen": "*:80",
-            "functions": {
-                "contents": {
-                    "dims": {
-                        "meta": {
-                            "minSourceSize": 0,
-                            "enable": true,
-                            "maxSourceSize": 11,
-                            "keyword": "dims"
-                        }
-                    }
-                }
-            },
-            "name": "image.winesoft.com",
-            "origin": {
-                "address": [
-                    "demo.winesoft.co.kr"
-                ],
-                "protocol": "http"
-            },
-            "enable": true
-        }
-    ],
+    "hosting": [],
     "env": {
         "log": {
             "info": {
