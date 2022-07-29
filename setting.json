@@ -1,0 +1,770 @@
+{
+    "meta": {
+        "version": "1",
+        "hostName": "example",
+        "admin": "admin@example.com"
+    },
+    "hosting": [],
+    "env": {
+        "log": {
+            "info": {
+                "enable": true,
+                "rolling": {
+                    "size": 1
+                },
+                "retention": 10,
+                "compression": false
+            },
+            "deny": {
+                "enable": true,
+                "rolling": {
+                    "size": 1
+                },
+                "retention": 10,
+                "compression": false
+            },
+            "originError": {
+                "enable": true,
+                "rolling": {
+                    "size": 1
+                },
+                "retention": 10,
+                "warning": false,
+                "compression": false
+            }
+        },
+        "network": {
+            "passiveSockets": {
+                "listenIps": [
+                    "0.0.0.0:80"
+                ],
+                "maxCount": 80000,
+                "reopenRatio": 75
+            },
+            "http": {
+                "frontEnd": {
+                    "recvBufferSize": 8192,
+                    "initCount": 20000,
+                    "increaseCount": 6000
+                }
+            },
+            "https": {
+                "frontEnd": {
+                    "enableAES-NI": true,
+                    "enableSni": true,
+                    "initCount": 200,
+                    "increaseCount": 128
+                }
+            },
+            "http2": {
+                "enable": false,
+                "concurrentStreamMaxCount": 10,
+                "keepAliveSec": 10
+            },
+            "pipelineSession": {
+                "internalTimeout": 10,
+                "externalTimeout": 300,
+                "listenTimeout": 10,
+                "keepAlive": {
+                    "enable": true,
+                    "reuseTimeout": 10
+                }
+            }
+        },
+        "management": {
+            "api": {
+                "port": 10040,
+                "defaultRole": "admin",
+                "multipartName": "settingFile",
+                "allowList": []
+            },
+            "server": {
+                "enable": true,
+                "connection": [
+                    {
+                        "name": "m2livePubsub",
+                        "type": "firebasePubsub",
+                        "info": {
+                            "apiKey": "AIzaSyBi_8TxfVOFIKkCYTJdlbsKnjMFzNRk6Ag",
+                            "authDomain": "m2live-api.firebaseapp.com",
+                            "databaseUrl": "https://m2live-api-default-rtdb.asia-southeast1.firebasedatabase.app",
+                            "projectId": "m2live-api",
+                            "storageBucket": "m2live-api.appspot.com",
+                            "messagingSenderId": "377398258384",
+                            "appId": "1:377398258384:web:7500521dd2ece2892c4cd5",
+                            "measurementId": "G-3NWETRE4LF"
+                        }
+                    }
+                ],
+                "features": {
+                    "setting": {
+                        "enable": true,
+                        "feed": {
+                            "type": "firestore",
+                            "info": {
+                                "connect": "m2livePubsub",
+                                "doc": "m2nodes/#m2live.nodeId/events"
+                            }
+                        },
+                        "feedback": {
+                            "type": "firestore",
+                            "info": {
+                                "connect": "m2livePubsub",
+                                "doc": "m2nodes/#m2live.nodeId/feedbacks"
+                            }
+                        }
+                    },
+                    "heartbeat": {
+                        "enable": true,
+                        "feedback": {
+                            "type": "firestore",
+                            "info": {
+                                "connect": "m2livePubsub",
+                                "doc": "m2nodes/#m2live.nodeId/heartbeats",
+                                "schedule": "*/15 * * * * *",
+                                "metrics": {
+                                    "system": true,
+                                    "rt": true,
+                                    "hosting": true,
+                                    "node": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "properties": {
+            "masterProcess": {
+                "enable": true,
+                "title": "m2m"
+            },
+            "inspection": {
+                "process": {
+                    "enable": true,
+                    "retention": 14,
+                    "schedule": "5 * * * * *",
+                    "dir": "log/process"
+                },
+                "memoryLimit": {
+                    "enable": true,
+                    "schedule": "5 * * * * *",
+                    "coverage": "application",
+                    "threshold": 5000,
+                    "killTimeout": 3000
+                }
+            }
+        },
+        "puppeteer": {
+            "mode": {
+                "headless": true,
+                "enableCache": false
+            },
+            "options": [
+                "--proxy-server=",
+                "--media-cache-size=0",
+                "--disk-cache-size=0"
+            ],
+            "pagePool": {
+                "pageReuseCount": 10000,
+                "useRandomCount": true,
+                "min": 0,
+                "max": 1,
+                "idleTimeout": 60000
+            }
+        },
+        "rt": {
+            "location": {
+                "protocol": "http",
+                "ip": "127.0.0.1",
+                "port": 80,
+                "dir": "/usr/local/m2/rt"
+            },
+            "config": {
+                "latest": "/conf/latest",
+                "global": "/conf/server.xml",
+                "vhosts": "/conf/vhosts.xml",
+                "runtime": "/addons/m2/runtime",
+                "refresh": {
+                    "enable": true,
+                    "interval": 5000
+                }
+            },
+            "report": {
+                "enable": true,
+                "path": "/addons/m2/latest?data=",
+                "interval": "4h"
+            },
+            "properties": {
+                "memoryRatio": 100,
+                "memoryRatioFree": 40,
+                "memoryRatioContents": 50,
+                "cacheObjectSize": 900,
+                "enableEmergencyMode": false,
+                "enableSyncStale": true,
+                "writeCountSmallFile": 0
+            },
+            "preCacheControl": {
+                "enable": true,
+                "maxCount": 1024,
+                "matchFirstOnly": false
+            },
+            "localCacheStorage": {
+                "meta": {
+                    "diskFailSec": 60,
+                    "diskFailCount": 10,
+                    "onCrash": "hang"
+                },
+                "disks": [
+                    {
+                        "mount": "/user/cache1",
+                        "quota": 100,
+                        "quotaUnit": "size"
+                    }
+                ],
+                "cleanup": {
+                    "time": "02:00",
+                    "age": 1,
+                    "emptyDir": "delete",
+                    "fileCount": 0
+                }
+            }
+        }
+    },
+    "functions": {
+        "contents": {
+            "pageDesk": {
+                "meta": {
+                    "enable": false,
+                    "keyword": "pagedesk"
+                },
+                "replace": {
+                    "pre": {
+                        "enable": false,
+                        "list": []
+                    },
+                    "post": {
+                        "enable": false,
+                        "list": []
+                    }
+                },
+                "dom": {
+                    "insert": {
+                        "enable": false,
+                        "action": "appendChild",
+                        "list": []
+                    },
+                    "remove": {
+                        "enable": false,
+                        "includeChild": true,
+                        "elements": [
+                            "applet",
+                            "acronym",
+                            "bgsound",
+                            "dir",
+                            "frame",
+                            "frameset",
+                            "noframes",
+                            "hgroup",
+                            "isindex",
+                            "listing",
+                            "nextid",
+                            "noembed",
+                            "plaintext",
+                            "strike",
+                            "xmp",
+                            "basefont",
+                            "big",
+                            "blink",
+                            "center",
+                            "font",
+                            "marquee",
+                            "menu",
+                            "menuitem",
+                            "multicol",
+                            "nobr",
+                            "spacer",
+                            "tt",
+                            "rb",
+                            "rtc"
+                        ]
+                    },
+                    "tags": {
+                        "anchor": {
+                            "enable": false,
+                            "enableLink": true
+                        }
+                    },
+                    "sizeLimit": {
+                        "enable": true,
+                        "max": 1048576,
+                        "timing": "preprocess"
+                    }
+                }
+            },
+            "pageEffector": {
+                "responsive": {
+                    "enable": false,
+                    "width": 800
+                },
+                "viewMore": {
+                    "enable": false,
+                    "height": {
+                        "initial": 900,
+                        "margin": 0
+                    }
+                },
+                "pinchZoom": {
+                    "enable": false,
+                    "selector": null
+                },
+                "iframeAutoHeight": {
+                    "enable": false,
+                    "selector": false,
+                    "library": {
+                        "parent": {
+                            "enable": false,
+                            "option": null
+                        },
+                        "child": {
+                            "enable": false
+                        }
+                    }
+                }
+            },
+            "pageMixed": {
+                "meta": {
+                    "enable": false,
+                    "keyword": "pageMixed"
+                },
+                "traffics": {
+                    "rebound": {
+                        "domain": null,
+                        "tags": {
+                            "domain": null,
+                            "targets": []
+                        }
+                    },
+                    "resource": {
+                        "domain": null
+                    }
+                },
+                "upgradeHttps": {
+                    "ip": {
+                        "enable": true
+                    },
+                    "retain": {
+                        "enable": true,
+                        "list": []
+                    },
+                    "black": {
+                        "enable": true,
+                        "list": []
+                    },
+                    "white": {
+                        "enable": true,
+                        "list": []
+                    },
+                    "svldb": {
+                        "enable": true,
+                        "url": "https://svl.m2live.co.kr",
+                        "report": {
+                            "enable": true,
+                            "schedule": "0 0 * * * *"
+                        },
+                        "update": {
+                            "enable": true,
+                            "schedule": "0 0 * * * *"
+                        }
+                    },
+                    "syntax": {
+                        "enable": true,
+                        "proxying": "http"
+                    },
+                    "targetTags": [
+                        "img.src",
+                        "img.data-src",
+                        "input.src",
+                        "video.src",
+                        "source.src",
+                        "iframe.src",
+                        "link.href",
+                        "script.src",
+                        "a.href",
+                        "embed.src"
+                    ]
+                },
+                "options": {
+                    "video": {
+                        "enable": false
+                    },
+                    "embed": {
+                        "enable": false
+                    },
+                    "schemeless": {
+                        "enable": false,
+                        "originProtocol": "http"
+                    },
+                    "encrpytSrcUrl": {
+                        "enable": false,
+                        "algorithm": null,
+                        "key": null,
+                        "iv": null
+                    }
+                },
+                "fallback": {
+                    "enable": true,
+                    "method": "redirect",
+                    "conditions": [
+                        "abort",
+                        "4xx",
+                        "5xx"
+                    ]
+                }
+            },
+            "denc": {
+                "chunk": {
+                    "enable": false,
+                    "keyword": "denchunk",
+                    "sampling": {
+                        "enable": false,
+                        "segmentSize": 1048576,
+                        "offset": 0,
+                        "encryptSize": 16384
+                    },
+                    "encryption": {
+                        "algorithm": "RC4",
+                        "iv": "",
+                        "token": "",
+                        "key": "$token",
+                        "keyHash": "none"
+                    }
+                },
+                "bulk": {
+                    "enable": false,
+                    "keyword": "dencbulk",
+                    "maxSourceSize": 500,
+                    "encrypt": {
+                        "algorithm": "RC4",
+                        "iv": "",
+                        "token": "",
+                        "key": "$token",
+                        "keyHash": "none"
+                    }
+                }
+            },
+            "dims": {
+                "meta": {
+                    "enable": false,
+                    "keyword": "dims",
+                    "minSourceSize": 0,
+                    "maxSourceSize": 10
+                },
+                "quality": {
+                    "max": 100,
+                    "format": 100
+                },
+                "gif": {
+                    "firstFrameOnly": false,
+                    "selectMinSize": false
+                }
+            }
+        },
+        "network": {
+            "cache": {
+                "ttl": {
+                    "policies": {
+                        "priority": [
+                            "cc_nocache",
+                            "custom",
+                            "cc_maxage",
+                            "rescode"
+                        ],
+                        "originBusy": 3,
+                        "extendBy4xx": false,
+                        "extendBy5xx": true,
+                        "unvalidatableObjectResCode": 0
+                    },
+                    "resCode": {
+                        "noCache": {
+                            "sec": 5,
+                            "ratio": 0,
+                            "max": 5,
+                            "maxAge": 0
+                        },
+                        "res2xx": {
+                            "sec": 300,
+                            "ratio": 0,
+                            "max": 86400
+                        },
+                        "res3xx": {
+                            "sec": 300
+                        },
+                        "res4xx": {
+                            "sec": 300
+                        },
+                        "res5xx": {
+                            "sec": 300
+                        },
+                        "onError": {
+                            "connectTimeout": 3,
+                            "receiveTimeout": 3
+                        }
+                    }
+                },
+                "cachingKey": {
+                    "case": {
+                        "enable": true
+                    },
+                    "queryString": {
+                        "enable": true
+                    },
+                    "acceptEncoding": {
+                        "enable": true
+                    },
+                    "vary": {
+                        "enable": true
+                    },
+                    "postMethod": {
+                        "enable": false,
+                        "bodySensitive": true,
+                        "bodyContentLengthMax": 102400
+                    }
+                },
+                "purge": {
+                    "noCacheRequestExpire": false,
+                    "refreshExpired": true,
+                    "purge2Expire": "none",
+                    "rootPurgeExpire": "all",
+                    "rootHardPurge": true,
+                    "resCodeNoCtrlTarget": 200,
+                    "queryStringCollective": false
+                }
+            },
+            "http": {
+                "frontEnd": {
+                    "session": {
+                        "keepAliveSec": 10
+                    },
+                    "headers": {
+                        "via": {
+                            "enable": true
+                        },
+                        "etag": {
+                            "enable": true
+                        },
+                        "age": {
+                            "enable": true
+                        },
+                        "server": {
+                            "enable": true
+                        },
+                        "connection": {
+                            "directive": "keep-alive"
+                        },
+                        "lastModified": {
+                            "rule": "exact"
+                        },
+                        "cacheOriginal": {
+                            "enable": false,
+                            "standard": false
+                        },
+                        "ifRange": {
+                            "enable": false,
+                            "purge": false
+                        },
+                        "keepAlive": {
+                            "enable": true,
+                            "max": 0
+                        },
+                        "modify": {
+                            "enable": false,
+                            "matchFirstOnly": false
+                        },
+                        "expires": {
+                            "enable": false,
+                            "base": "access"
+                        },
+                        "debug": {
+                            "enableContentProcessing": false
+                        }
+                    },
+                    "bypass": {
+                        "session": {
+                            "connectTimeout": 5,
+                            "receiveTimeout": 300
+                        },
+                        "getMethod": {
+                            "enable": false,
+                            "enableBackendAffinity": true,
+                            "enableSticky": true
+                        },
+                        "postMethod": {
+                            "enable": false,
+                            "enableBackendAffinity": true,
+                            "enableSticky": true
+                        },
+                        "putMethod": {
+                            "enable": false,
+                            "enableBackendAffinity": true,
+                            "enableSticky": true
+                        }
+                    },
+                    "accessControl": {
+                        "enable": false,
+                        "denialCode": 401,
+                        "mode": "deny"
+                    },
+                    "compression": {
+                        "meta": {
+                            "enable": false,
+                            "keyword": "hcpr",
+                            "minSrcSize": 2,
+                            "maxSrcSize": 2048
+                        },
+                        "gzip": {
+                            "level": 6
+                        },
+                        "brotli": {
+                            "window": 22,
+                            "quality": 11
+                        }
+                    },
+                    "customErrorPage": {
+                        "resCode": 0,
+                        "path": "/error.html"
+                    }
+                },
+                "backEnd": {
+                    "session": {
+                        "connectTimeout": 3,
+                        "receiveTimeout": 10,
+                        "reuseTimeout": 60,
+                        "balanceMode": "roundrobin",
+                        "busyCount": 100
+                    },
+                    "dns": {
+                        "ttlMin": 0,
+                        "ttlMax": 0
+                    },
+                    "health": {
+                        "exclusion": {
+                            "count": 3
+                        },
+                        "recovery": {
+                            "cycle": 10,
+                            "count": 5,
+                            "responseCode": 0,
+                            "url": "/",
+                            "log": true
+                        }
+                    },
+                    "headers": {
+                        "host": {
+                            "enable": false,
+                            "value": null
+                        },
+                        "userAgent": {
+                            "enable": false,
+                            "value": null
+                        },
+                        "xff": {
+                            "appendProxy": true
+                        },
+                        "etag": {
+                            "enable": false
+                        },
+                        "ifRange": {
+                            "enable": false
+                        },
+                        "wholeClientRequest": {
+                            "enable": false
+                        },
+                        "originalEtag": {
+                            "enable": false
+                        },
+                        "limitMaxRange": {
+                            "enable": false,
+                            "size": 1
+                        },
+                        "initByFullRange": {
+                            "enable": false
+                        },
+                        "modify": {
+                            "enable": false,
+                            "matchFirstOnly": false
+                        }
+                    },
+                    "authorization": {
+                        "enable": false,
+                        "type": "aws-s3",
+                        "accessKeyID": "",
+                        "secretAccessKey": "",
+                        "region": ""
+                    },
+                    "redirectionTrace": {
+                        "enable": false
+                    }
+                }
+            }
+        },
+        "operations": {
+            "log": {
+                "meta": {
+                    "dir": "/m2log"
+                },
+                "access": {
+                    "enable": true,
+                    "rolling": {
+                        "time": 60
+                    },
+                    "retention": 10,
+                    "compression": false,
+                    "xff": "all",
+                    "form": "m2",
+                    "format": null,
+                    "loopback": false
+                },
+                "origin": {
+                    "enable": true,
+                    "rolling": {
+                        "time": 60
+                    },
+                    "retention": 10,
+                    "compression": false,
+                    "loopback": false
+                },
+                "dims": {
+                    "enable": true,
+                    "rolling": {
+                        "time": 60
+                    },
+                    "retention": 10,
+                    "compression": false
+                },
+                "monitoring": {
+                    "enable": true,
+                    "rolling": {
+                        "time": 60
+                    },
+                    "retention": 10,
+                    "compression": false,
+                    "form": "json"
+                }
+            },
+            "stats": {
+                "level": {
+                    "depth": 0,
+                    "accumulate": false
+                },
+                "https": {
+                    "seperate": false
+                },
+                "loopback": {
+                    "passive": false,
+                    "active": false
+                }
+            }
+        }
+    }
+}
