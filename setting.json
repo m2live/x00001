@@ -7,24 +7,24 @@
     "hosting": [
         {
             "listen": "*:80",
+            "functions": {
+                "contents": {
+                    "dims": {
+                        "meta": {
+                            "minSourceSize": 0,
+                            "enable": true,
+                            "maxSourceSize": 11,
+                            "keyword": "dims"
+                        }
+                    }
+                }
+            },
             "name": "image.winesoft.com",
             "origin": {
                 "address": [
                     "demo.winesoft.co.kr"
                 ],
                 "protocol": "http"
-            },
-            "functions": {
-                "contents": {
-                    "dims": {
-                        "meta": {
-                            "enable": true,
-                            "keyword": "dims",
-                            "maxSourceSize": 9,
-                            "minSourceSize": 0
-                        }
-                    }
-                }
             },
             "enable": true
         }
